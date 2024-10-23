@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: web
+  namespace: my-ns      # Specify the namespace here
+  labels:
+    app: web
+spec:
+  selector:
+    matchLabels:
+      app: web
+  serviceName: "web"
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+  namespace: my-ns      # Specify the namespace here
+  labels:
+    app: web
+spec:
+  selector:
+    app: web
+  ports:
+  - port: 80
+    targetPort: 80
+  type: ClusterIP
+  sessionAffinity: ClientIP   # Enable session affinity based on the client IP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800   # Set timeout for affinity in seconds (3 hours here)
+

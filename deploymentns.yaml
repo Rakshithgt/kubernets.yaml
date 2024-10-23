@@ -2,8 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx-deployment-new
+  namespace: my-ns
   labels:
-    app: my-deployment-app
+    app: my-deployment
 spec:
   replicas: 5
   selector:
@@ -16,6 +17,6 @@ spec:
     spec:
       containers:
       - name: myapp
-        image: rakshithgt96/k8s-ip:v1 
+        image: rakshithgt96/ip 
         ports:
         - containerPort: 80

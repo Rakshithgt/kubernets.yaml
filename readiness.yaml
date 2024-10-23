@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deployment
+spec:
+  selector:               # Selector is required to match the labels in the pod template
+    matchLabels:
+      app: my-test-app
+  template:
+    metadata:
+      labels:
+        app: my-test-app  # These labels must match the selector
+    spec:
+      containers:
+      - name: my-test-app
+        image: nginx:1.14.2
+        readinessProbe:
+          httpGet:
+            path: /       # if we need to see the fail probe instead / add /ready
+            port: 80
+          successThreshold: 3
+

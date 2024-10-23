@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: init-container
+spec:
+  containers:
+    - name: my-nginx
+      image: nginx:latest
+      ports:
+        - containerPort: 80
+      volumeMounts:
+        - name: workdir
+          mountPath: "/var/log/nginx"
+    - name: sidecar-busybox
+      image: busybox
+      command: ["/bin/sh", "-c", "while true; do cat /var/log/nginx/access.log /var/log/nginx/error.log; sleep 15; done"]
+      volumeMounts:
+        - name: workdir
+          mountPath: "/var/log/nginx"
+  volumes:
+    - name: workdir
+      emptyDir: {}
+
