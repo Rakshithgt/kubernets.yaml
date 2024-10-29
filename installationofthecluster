@@ -1,0 +1,50 @@
+Kops installation
+
+DNS NAME
+S3 BUCKET 
+IAM ROLE AND ASSIGN IT TO EC2 
+CREATE A EC2 INSTANCE AND GENERATE SSH ROLE
+download Kops and Kubectl to usr/local/bin and change permissions.
+kops github -> release and change the permission.
+kubectl and change the permission.
+
+
+# Download Kubectl and give permissions.
+# edit .bashrc and add all the env variables 
+
+export NAME=gan2.xyz
+export KOPS_STATE_STORE=s3://gan2.xyz
+export AWS_REGION=ap-south-1
+export CLUSTER_NAME=gan2.xyz
+export EDITOR='/usr/bin/vi'
+
+# After copying the above files to .bashrc run “ source .bashrc ”.
+
+# Create a Cluster using Kops and generate a cluster file and save it carefully and do neccessary changes
+
+
+# Node cluster 
+
+# kops create cluster --name=gan2.xyz \
+--state=s3://gan2.xyz --zones=ap-south-1a,ap-south-1b \
+--node-count=2 --control-plane-count=1 --node-size=t3.medium --control-plane-size=t3.medium \
+--control-plane-zones=ap-south-1a --control-plane-volume-size 10 --node-volume-size 10 \
+--ssh-public-key ~/.ssh/id_rsa.pub \
+--dns-zone=gan2.xyz --dry-run --output yaml
+
+
+# One done run below commands to create the cluster 
+
+kops create -f cluster.yml
+kops update cluster --name cloudvishwakarma.in --yes --admin
+kops validate cluster --wait 10m
+kops delete -f cluster.yml  --yes
+
+
+
+kubectl run testpod1 --image nginx:latest --dry-run -o yaml
+
+or different method  
+watch this video to install the cluster
+
+https://www.linuxtechi.com/install-kubernetes-on-ubuntu-22-04/ 
