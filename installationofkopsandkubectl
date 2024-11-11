@@ -45,3 +45,7 @@ kops create -f cluster.yml
 kops update cluster --name gan2.xyz --yes --admin
 kops validate cluster --wait 10m
 kops delete -f cluster.yml  --yes
+
+
+
+khjksdhasjkhdsa
