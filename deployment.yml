@@ -1,21 +1,84 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deployment-new
   labels:
-    app: my-deployment-app
+    app: testpod1
+  name: testpod1
 spec:
-  replicas: 5
+  minReadySeconds: 10
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  replicas: 3
   selector:
-    matchLabels:  
-      app: my_app 
+    matchLabels:
+      app: testpod1
+  strategy: {}
   template:
     metadata:
       labels:
-        app: my_app
+        app: testpod1
     spec:
       containers:
-      - name: myapp
-        image: rakshithgt96/k8s-ip:v1 
-        ports:
-        - containerPort: 80
+      - image: kiran2361993/kubegame:v1
+        name: kubegame
+ 
+
+---
+
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  labels:
+    app: testpod1
+  name: testpod1
+spec:
+  selector:
+    matchLabels:
+      app: testpod1
+  template:
+    metadata:
+      labels:
+        app: testpod1
+    spec:
+      containers:
+      - image: kiran2361993/kubegame:v1
+        name: kubegame 
+		
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: testpod1
+  name: testpod1
+  annotations:
+    info: "rakshith"
+    email: "rakshithgt222@gmail.com"
+    owner: "rakshith"
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: testpod1
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: testpod1
+    spec:
+      containers:
+      - image: kiran2361993/kubegame:v2
+        name: kubegame
+      - image: kiran2361993/mydb:v1
+        name: mysqldb
+        env:
+          - name: DB_NAME
+            value: "mysqldb"
+          - name: DB_PORT
+            value: "3306"
+          - name: DB_URL
+            value: "wewewe"    
+
